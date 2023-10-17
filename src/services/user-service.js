@@ -1,6 +1,4 @@
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { SALT_ROUNDS, SECRET } = require("../config/serverConfig");
 
 const UserRepository = require("../repository/user-repository");
 const repository = new UserRepository();
@@ -16,18 +14,6 @@ class UserService {
     }
   }
 
-  async createToken(id) {
-    try {
-      const user = await this.getById(id);
-      const token = jwt.sign(user, SECRET);
-      console.log("token: ", token);
-      return token;
-    } catch (error) {
-      console.log("Something went wrong while generating a token");
-      throw error;
-    }
-  }
-
   async getByEmail(email) {
     try {
       const user = await repository.getByEmail(email);
@@ -38,9 +24,9 @@ class UserService {
     }
   }
 
-  async getById(id) {
+  async getById(data) {
     try {
-      const response = await repository.getById(id);
+      const response = await repository.getById(data);
       return response;
     } catch (error) {
       console.log("Something went wrong at service layer");
@@ -64,8 +50,7 @@ class UserService {
         throw "Incorrect password";
       }
 
-      const token = await this.createToken(email, user.id);
-      return token;
+      this.createToken(email, id);
     } catch (error) {
       console.log("Something went wrong at service layer");
       throw error;
