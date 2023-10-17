@@ -12,6 +12,16 @@ class UserService {
     }
   }
 
+  async getByEmail(email) {
+    try {
+      const user = await repository.getByEmail(email);
+      return user;
+    } catch (error) {
+      console.log("Something went wrong at service layer");
+      throw error;
+    }
+  }
+
   async getById(data) {
     try {
       const response = await repository.getById(data);
