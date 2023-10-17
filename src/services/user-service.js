@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { SALT_ROUNDS, SECRET } = require("../config/serverConfig");
+const { SECRET } = require("../config/serverConfig");
 
 const UserRepository = require("../repository/user-repository");
 const repository = new UserRepository();
@@ -19,7 +19,9 @@ class UserService {
   async createToken(id) {
     try {
       const user = await this.getById(id);
-      const token = jwt.sign(user, SECRET);
+      console.log("secret: ", SECRET);
+      console.log("user: ", user);
+      const token = jwt.sign({ email: user.email, id: user.id }, SECRET);
       console.log("token: ", token);
       return token;
     } catch (error) {
@@ -41,6 +43,7 @@ class UserService {
   async getById(id) {
     try {
       const response = await repository.getById(id);
+      console.log("getById: ", response);
       return response;
     } catch (error) {
       console.log("Something went wrong at service layer");
@@ -55,22 +58,81 @@ class UserService {
         throw "User doesn't exists";
       }
 
-      const isPasswordCorrect = bcrypt.compareSync(
-        plainPassword,
-        user.password
-      );
+      // const isPasswordCorrect = bcrypt.compareSync(
+      //   plainPassword,
+      //   user.password
+      // );
+      const isPasswordCorrect = user.password === plainPassword;
 
       if (!isPasswordCorrect) {
         throw "Incorrect password";
       }
-
-      const token = await this.createToken(email, user.id);
+      console.log("id: ", user.id);
+      const token = await this.createToken(user.id);
       return token;
     } catch (error) {
       console.log("Something went wrong at service layer");
       throw error;
     }
   }
+
+  async verifyToken(token) {
+    try {
+      let user = jwt.verify(token, SECRET);
+      if (!user) {
+        throw "Invalid token";
+      }
+      console.log("user before: ", user);
+      delete user.password;
+      console.log("user after: ", user);
+      return user;
+    } catch (error) {
+      console.log("something went wrong in token authentication");
+      throw error;
+    }
+  }
 }
+// TODO
+// createToken(user:{email, id})
+// verifyToken(token)
+// checkPassword(plainPassword,encyptedPassword)
+// async signIn(email, plainPassword)
+// ---- fetch user by email
+// ---- compare passwords
+// ---- generate Token
+// repository --> asycn getByEmail(email)
+
+// user model
+// beforeCreate((user) => {
+// encrypted = bcrypt.hashSync(user.password,SALT) , SALT -> environmen variables -> bcrypt.genSaltSync(9: saltRounds)
+// user.password = encryptedPassword
+// })
+
+// middleware
+// validateUserAuth() -> email or password is missing, commit -> add email and password validation for incoming auth request
+
+// user service
+// async isAuthenticated(token) -> if !response -> err: invalid token, if !user -> err: no user with corresponding token exists
+//  return user.id
+//
+
+// authorisation
+// add model -> role
+// create many to many association user_roles
+// add role seed files
+// create isAdmin method in both service and repository layer
+//
+// middleware
+// validateIsAdminRequest -> !req.body.id -> err: user id is not given, else next();
+//
+// create new micro service -> booking service
+// create error files -> app-error-> genericc, validationError, serviceError
+// create model
+// Booking -> flightId:integer, userId:integer, status:enum,
+// add validations -> flightId -> not null, userId -> not null, status -> not null defauoltValue -> In Process values:['In Process', "Booked", "Cancelled"]
+// commit -> added booking model
+// now add total no. of seats, toatlCost column to model using migration, migration:create
+//
+// flight repository -> add getFlightById
 
 module.exports = UserService;
