@@ -13,7 +13,7 @@ const prepareAndStartServer = async () => {
 
   app.use("/api", apiRoutes);
   const service = new UserService();
-  const token = await service.signIn("1@gmail.com", "divesh");
+  const response = await service.signIn("1@gmail.com", "divesh");
   // const user = await service.verifyToken(token);
   // const user = await service.create({
   //   email: "1@gmail.com",
@@ -22,7 +22,7 @@ const prepareAndStartServer = async () => {
 
   app.listen(PORT, () => {
     console.log(`server running at port ${PORT}`);
-    console.log(token);
+    console.log(response);
   });
 };
 prepareAndStartServer();

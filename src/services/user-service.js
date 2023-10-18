@@ -19,10 +19,7 @@ class UserService {
   async createToken(id) {
     try {
       const user = await this.getById(id);
-      console.log("secret: ", SECRET);
-      console.log("user: ", user);
       const token = jwt.sign({ email: user.email, id: user.id }, SECRET);
-      // console.log("token: ", token);
       return token;
     } catch (error) {
       console.log("Something went wrong while generating a token");
@@ -43,7 +40,6 @@ class UserService {
   async getById(id) {
     try {
       const response = await repository.getById(id);
-      console.log("getById: ", response);
       return response;
     } catch (error) {
       console.log("Something went wrong at service layer");
@@ -62,12 +58,10 @@ class UserService {
         plainPassword,
         user.password
       );
-      // const isPasswordCorrect = user.password === plainPassword;
 
       if (!isPasswordCorrect) {
         throw "Incorrect password";
       }
-      console.log("id: ", user.id);
       const token = await this.createToken(user.id);
       return { email: user.email, id: user.id, token };
     } catch (error) {
