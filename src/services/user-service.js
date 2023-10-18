@@ -22,7 +22,7 @@ class UserService {
       console.log("secret: ", SECRET);
       console.log("user: ", user);
       const token = jwt.sign({ email: user.email, id: user.id }, SECRET);
-      console.log("token: ", token);
+      // console.log("token: ", token);
       return token;
     } catch (error) {
       console.log("Something went wrong while generating a token");
@@ -82,9 +82,6 @@ class UserService {
       if (!user) {
         throw "Invalid token";
       }
-      console.log("user before: ", user);
-      delete user.password;
-      console.log("user after: ", user);
       return user;
     } catch (error) {
       console.log("something went wrong in token authentication");
