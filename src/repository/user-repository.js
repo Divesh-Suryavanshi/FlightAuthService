@@ -46,6 +46,20 @@ class UserRepository {
       throw error;
     }
   }
+
+  async getRoleByName(name) {
+    try {
+      const role = await Role.findOne({
+        where: {
+          name,
+        },
+      });
+      return role;
+    } catch (error) {
+      console.log("something went wrong in repository layer");
+      throw error;
+    }
+  }
 }
 
 module.exports = UserRepository;

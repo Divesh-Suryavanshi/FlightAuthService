@@ -92,6 +92,18 @@ class UserService {
       throw error;
     }
   }
+
+  async isAdmin(id) {
+    try {
+      const admin = await repository.getRoleByName("admin");
+      const user = await this.getById(id);
+      const result = await user.hasRole(admin);
+      return result;
+    } catch (error) {
+      console.log("something went wrong at repository layer");
+      throw error;
+    }
+  }
 }
 // TODO
 // createToken(user:{email, id})
