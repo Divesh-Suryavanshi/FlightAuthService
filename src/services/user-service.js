@@ -58,11 +58,11 @@ class UserService {
         throw "User doesn't exists";
       }
 
-      // const isPasswordCorrect = bcrypt.compareSync(
-      //   plainPassword,
-      //   user.password
-      // );
-      const isPasswordCorrect = user.password === plainPassword;
+      const isPasswordCorrect = bcrypt.compareSync(
+        plainPassword,
+        user.password
+      );
+      // const isPasswordCorrect = user.password === plainPassword;
 
       if (!isPasswordCorrect) {
         throw "Incorrect password";
