@@ -82,6 +82,16 @@ class UserService {
       throw error;
     }
   }
+
+  async getRoleById(id) {
+    try {
+      const role = await repository.getRoleById(id);
+      return role;
+    } catch (error) {
+      console.log("something went wrong in service layer");
+      throw error;
+    }
+  }
 }
 // TODO
 // createToken(user:{email, id})

@@ -1,4 +1,4 @@
-const { User } = require("../models/");
+const { User, Role } = require("../models/");
 
 class UserRepository {
   async create(data) {
@@ -33,6 +33,16 @@ class UserRepository {
       return user;
     } catch (error) {
       console.log("Something went wrong at repository layer");
+      throw error;
+    }
+  }
+
+  async getRoleById(id) {
+    try {
+      const role = await Role.findByPk(id);
+      return role;
+    } catch (error) {
+      console.log("something went wrong in repository layer");
       throw error;
     }
   }
