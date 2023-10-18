@@ -69,7 +69,7 @@ class UserService {
       }
       console.log("id: ", user.id);
       const token = await this.createToken(user.id);
-      return token;
+      return { email: user.email, id: user.id, token };
     } catch (error) {
       console.log("Something went wrong at service layer");
       throw error;
