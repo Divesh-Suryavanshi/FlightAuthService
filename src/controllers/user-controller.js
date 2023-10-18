@@ -42,7 +42,30 @@ const signIn = async (req, res) => {
   }
 };
 
+const isAuthenticated = async (req, res) => {
+  try {
+    const token = req.headers.authorization.slice(7);
+    // console.log(token);
+    const user = await service.verifyToken(token);
+    console.log("authenticated?: ", user);
+    return res.status(200).json({
+      success: true,
+      data: { id: user.id },
+      err: {},
+      message: "Authentication check successfull",
+    });
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      data: {},
+      err: error,
+      message: "Authentication check failed",
+    });
+  }
+};
+
 module.exports = {
   create,
   signIn,
+  isAuthenticated,
 };
