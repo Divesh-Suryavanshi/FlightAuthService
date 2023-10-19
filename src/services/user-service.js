@@ -6,9 +6,9 @@ const UserRepository = require("../repository/user-repository");
 const repository = new UserRepository();
 
 class UserService {
-  async create(data) {
+  async createUser(data) {
     try {
-      const response = await repository.create(data);
+      const response = await repository.createUser(data);
       return response;
     } catch (error) {
       console.log("Something went wrong at service layer");
@@ -18,7 +18,7 @@ class UserService {
 
   async createToken(id) {
     try {
-      const user = await this.getById(id);
+      const user = await this.getUserById(id);
       const token = jwt.sign({ email: user.email, id: user.id }, SECRET);
       return token;
     } catch (error) {
@@ -27,9 +27,9 @@ class UserService {
     }
   }
 
-  async getByEmail(email) {
+  async getUserByEmail(email) {
     try {
-      const user = await repository.getByEmail(email);
+      const user = await repository.getUserByEmail(email);
       return user;
     } catch (error) {
       console.log("Something went wrong at service layer");
@@ -37,9 +37,9 @@ class UserService {
     }
   }
 
-  async getById(id) {
+  async getUserById(id) {
     try {
-      const response = await repository.getById(id);
+      const response = await repository.getUserById(id);
       return response;
     } catch (error) {
       console.log("Something went wrong at service layer");
@@ -49,7 +49,7 @@ class UserService {
 
   async signIn(email, plainPassword) {
     try {
-      const user = await this.getByEmail(email);
+      const user = await this.getUserByEmail(email);
       if (!user) {
         throw "User doesn't exists";
       }

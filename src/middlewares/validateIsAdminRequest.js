@@ -1,4 +1,4 @@
-const validateIsAdmin = (req, res, next) => {
+const validateIsAdminRequest = (req, res, next) => {
   try {
     if (!req.body.id) {
       throw "user id is missing";
@@ -14,4 +14,4 @@ const validateIsAdmin = (req, res, next) => {
   }
 };
 
-module.exports = { validateIsAdmin };
+module.exports = validateIsAdminRequest;

@@ -2,19 +2,27 @@ const router = require("express").Router();
 
 const userController = require("../../controllers/user-controller");
 
-const userMiddleware = require("../../middlewares/user-middlewares");
-const roleMiddleware = require("../../middlewares/role-middlewares");
+// middlewares import
+const {
+  validateAuthRequest,
+  validateIsAdminRequest,
+  validateIsAuthenticatedRequest,
+} = require("../../middlewares");
 
 // create user
-router.post("/user", userMiddleware.validate, userController.create);
+router.post("/user", validateAuthRequest, userController.createUser);
 
 // signin
-router.post("/user/signin", userMiddleware.validate, userController.signIn);
+router.post("/user/signin", validateAuthRequest, userController.signIn);
 
 // is Authenticated
-router.get("/isauthenticated", userController.isAuthenticated);
+router.get(
+  "/isauthenticated",
+  validateIsAuthenticatedRequest,
+  userController.isAuthenticated
+);
 
 // is Admin
-router.get("/isAdmin", roleMiddleware.validateIsAdmin, userController.isAdmin);
+router.get("/isAdmin", validateIsAdminRequest, userController.isAdmin);
 
 module.exports = router;

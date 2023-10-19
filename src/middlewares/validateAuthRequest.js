@@ -1,4 +1,4 @@
-const validate = (req, res, next) => {
+const validateAuthRequest = (req, res, next) => {
   try {
     if (!req.body.email) {
       throw "email id is missing";
@@ -17,6 +17,4 @@ const validate = (req, res, next) => {
   }
 };
 
-module.exports = {
-  validate,
-};
+module.exports = validateAuthRequest;

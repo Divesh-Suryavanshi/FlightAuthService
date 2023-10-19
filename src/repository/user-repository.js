@@ -1,7 +1,7 @@
 const { User, Role } = require("../models/");
 
 class UserRepository {
-  async create(data) {
+  async createUser(data) {
     try {
       const user = await User.create(data);
       return user;
@@ -11,7 +11,7 @@ class UserRepository {
     }
   }
 
-  async getByEmail(email) {
+  async getUserByEmail(email) {
     try {
       const user = await User.findOne({
         where: {
@@ -25,7 +25,7 @@ class UserRepository {
     }
   }
 
-  async getById(userId) {
+  async getUserById(userId) {
     try {
       const user = await User.findByPk(userId, {
         attributes: ["email", "id"],

@@ -1,9 +1,9 @@
 const UserService = require("../services/user-service");
 const service = new UserService();
 
-const create = async (req, res) => {
+const createUser = async (req, res) => {
   try {
-    const response = await service.create({
+    const response = await service.createUser({
       email: req.body.email,
       password: req.body.password,
     });
@@ -88,7 +88,7 @@ const isAdmin = async (req, res) => {
 };
 
 module.exports = {
-  create,
+  createUser,
   signIn,
   isAuthenticated,
   isAdmin,
