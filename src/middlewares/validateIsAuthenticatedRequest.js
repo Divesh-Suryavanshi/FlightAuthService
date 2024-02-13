@@ -1,6 +1,6 @@
 const validateIsAuthenticatedRequest = (req, res, next) => {
   try {
-    if (!req.headers.authorisation) {
+    if (!req.headers.authorization) {
       throw "auth token is missing";
     }
     next();
